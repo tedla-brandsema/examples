@@ -10,24 +10,28 @@ import (
 // both the "Name() string" and "Handle(val T) error" methods.
 type EmailDirective struct{}
 
-func (EmailDirective) Name() string {
+func (d *EmailDirective) Name() string {
 	return "email"
+}
+
+func (d *EmailDirective) Mode() tagex.DirectiveMode {
+	return tagex.EvalMode
 }
 
 // Even though tagex.Directive[T any] is generic, your implementation of it can be explicit.
 // Here Handle() explicitly is of type "int", which makes our "EmailDirective" explicitly of type "string".
 // This means we can use our EmailDirective only on fields of type "string".
-func (v *EmailDirective) Handle(val string) error {
+func (v *EmailDirective) Handle(val string) (string, error) {
 	_, err := mail.ParseAddress(val)
-	return err
+	return val, err
 }
 
 func main() {
 	// Create our "check" tag
-	chechTag := tagex.NewTag("check")
+	checkTag := tagex.NewTag("check")
 
 	// Register our "email" directive with our check tag
-	tagex.RegisterDirective(&chechTag, &EmailDirective{})
+	tagex.RegisterDirective(&checkTag, &EmailDirective{})
 
 	// Now we can use our "email" directive on the Email field of our "Contact" struct, which works because the field is of type string
 	type Contact struct {
@@ -63,7 +67,7 @@ func main() {
 
 	// Check our contacts by calling "ProcessStruct" on our tag
 	for _, contact := range contacts {
-		if ok, err := chechTag.ProcessStruct(contact); !ok {
+		if ok, err := checkTag.ProcessStruct(contact); !ok {
 			fmt.Printf("Invalid email %q: %v\n", contact.Email, err)
 			continue
 		}

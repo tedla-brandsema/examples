@@ -18,14 +18,18 @@ func (d *RangeDirective) Name() string {
 	return "range"
 }
 
+func (d *RangeDirective) Mode() tagex.DirectiveMode {
+	return tagex.EvalMode
+}
+
 // Even though tagex.Directive[T any] is generic, your implementation of it can be explicit.
 // Here Handle takes a val of type "int", therefore "RangeDirective" is of type "int".
 // This means we can only apply our RangeDirective to fields of type "int".
-func (d *RangeDirective) Handle(val int) error {
+func (d *RangeDirective) Handle(val int) (int, error) {
 	if val < d.Min || val > d.Max {
-		return fmt.Errorf("value %d out of range [%d, %d]", val, d.Min, d.Max)
+		return val, fmt.Errorf("value %d out of range [%d, %d]", val, d.Min, d.Max)
 	}
-	return nil
+	return val, nil
 }
 
 func main() {

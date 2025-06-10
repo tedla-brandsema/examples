@@ -44,6 +44,11 @@ type TitleDirective struct{}
 func (d *TitleDirective) Name() string {
 	return "title"
 }
+
+func (d *TitleDirective) Mode() tagex.DirectiveMode {
+	return tagex.MutMode
+}
+
 func (d *TitleDirective) Handle(val string) (string, error) {
 	return cases.Title(language.English, cases.Compact).String(val), nil
 }
