@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"github.com/tedla-brandsema/tagex"
 	"net/mail"
@@ -14,14 +15,14 @@ import (
 
 // User implements both the tagex.PreProcessor and tagex.PostProcessor interfaces.
 type User struct {
-	Username string
-	Email    string `validate:"email"`
-	Password string `validate:"password, min=8"`
-	Updated  time.Time
+	Username     string
+	Email        string `validate:"email"`           // here we make use of the EmailDirective (see below)
+	Password     string `validate:"password, min=8"` // here we make use of the PasswordDirective (see below)
+	LastModified time.Time
 }
 
-// Before implements the PreProcessor interface:
-// Here we can enforce prerequisites, in this case required fields.
+// Before implements the PreProcessor interface, here we can enforce prerequisites.
+// In this case, we test that the required fields are not empty.
 func (u *User) Before() error {
 	var err error
 
@@ -40,15 +41,18 @@ func (u *User) Before() error {
 	return nil
 }
 
-// PostProcessor implementation
+// After implements the PostProcessor interface. When our code reaches this point, we know that both the pre-processor
+// and the directives did not yield any errors. Therefore, we can focus our attention on the finishing touches: hashing
+// the user password and updating the LastModified field.
 func (u *User) After() error {
-	// Hash the password
+	// Hash the password and overwrite the raw password with our generated hash.
 	// WARNING: Oversimplified hashing of password; do not use in code meant for real world use.
 	h := sha256.New()
 	h.Write([]byte(u.Password))
-	u.Password = string(h.Sum(nil))
+	u.Password = hex.EncodeToString(h.Sum(nil))
 
-	u.Updated = time.Now().UTC()
+	// Update the LastModified field to the current date-time
+	u.LastModified = time.Now().UTC()
 
 	return nil
 }
@@ -56,7 +60,7 @@ func (u *User) After() error {
 func requiredField(fieldName, fieldValue string) (string, error) {
 	trimmed := strings.TrimSpace(fieldValue)
 	if trimmed == "" {
-		return "", fmt.Errorf("%q is a required field", fieldName)
+		return "", fmt.Errorf("%q is a required field and cannot be empty", fieldName)
 	}
 	return trimmed, nil
 }
@@ -73,8 +77,7 @@ func (d *EmailDirective) Mode() tagex.DirectiveMode {
 }
 
 func (d *EmailDirective) Handle(val string) (string, error) {
-	var err error
-	_, err = mail.ParseAddress(val)
+	_, err := mail.ParseAddress(val)
 	return val, err
 }
 
@@ -126,7 +129,7 @@ func printUser(user User) {
 	_, _ = fmt.Fprintf(w, "Username:\t%s\n", user.Username)
 	_, _ = fmt.Fprintf(w, "Email:\t%s\n", user.Email)
 	_, _ = fmt.Fprintf(w, "Password:\t%s\n", user.Password)
-	_, _ = fmt.Fprintf(w, "Updated:\t%s\n", user.Updated.Format(time.RFC822))
+	_, _ = fmt.Fprintf(w, "Updated:\t%s\n", user.LastModified.Format(time.RFC822))
 	_ = w.Flush()
 }
 
@@ -147,8 +150,7 @@ func main() {
 
 	// Process the "User" struct we created. ProcessStruct will invoke the "Before()", "Handle()" and "After()" methods
 	if ok, err := validateTag.ProcessStruct(&user); !ok {
-		fmt.Println(err)
-		return
+		panic(err)
 	}
 
 	printUser(user)

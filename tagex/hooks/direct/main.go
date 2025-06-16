@@ -48,11 +48,11 @@ func (t *Article) After() error {
 
 func printArticle(article Article) {
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 1, ' ', 0)
-	fmt.Fprintf(w, "Title:\t%s\n", article.Title)
-	fmt.Fprintf(w, "Created:\t%s\n", article.created.Format(time.RFC822))
-	fmt.Fprintf(w, "Path:\t%s\n", article.path)
-	fmt.Fprintf(w, "Body:\t%s\n", article.Body)
-	w.Flush()
+	_, _ = fmt.Fprintf(w, "Title:\t%s\n", article.Title)
+	_, _ = fmt.Fprintf(w, "Created:\t%s\n", article.created.Format(time.RFC822))
+	_, _ = fmt.Fprintf(w, "Path:\t%s\n", article.path)
+	_, _ = fmt.Fprintf(w, "Body:\t%s\n", article.Body)
+	_ = w.Flush()
 }
 
 func main() {

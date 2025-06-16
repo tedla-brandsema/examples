@@ -26,7 +26,7 @@ This mechanism is ideal for running prerequisite or post-processing logic, such 
 By using these interfaces, you can keep derived data logic close to your data model while keeping tag parsing clean and 
 declarative.
 
-You can find a full working example [here](https://github.com/tedla-brandsema/examples/tree/main/tagex/lifecycle/indirect/main.go).
+You can find a full working example [here](https://github.com/tedla-brandsema/examples/tree/main/tagex/hooks/indirect/main.go).
 
 
 ## Directly invoking the pre- and post-processor 
@@ -35,4 +35,4 @@ Pre- and post-processing of structs is a very handy tool to have in situations o
 accommodates for the direct invocation of the pre- and post-processor via the `tagex.InvokePreProcessor()` and 
 `tagex.InvokePostProcessor()` functions, without the need to create a *tag* or *directive*.
 
-You can find a full working example [here](https://github.com/tedla-brandsema/examples/tree/main/tagex/lifecycle/direct/main.go).
+You can find a full working example [here](https://github.com/tedla-brandsema/examples/tree/main/tagex/hooks/direct/main.go).
