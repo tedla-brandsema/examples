@@ -6,6 +6,8 @@ import (
 	"net/mail"
 )
 
+// START inferred-directive
+
 // EmailDirective implements the tagex.Directive interface.
 type EmailDirective struct{}
 
@@ -25,6 +27,8 @@ func (d *EmailDirective) Handle(val string) (string, error) {
 	_, err := mail.ParseAddress(val)
 	return val, err
 }
+
+// END inferred-directive
 
 func main() {
 	// Create our "check" tag

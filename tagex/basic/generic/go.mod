@@ -1,4 +1,4 @@
-module github.com/tedla-brandsema/tagex/examples/generics
+module github.com/tedla-brandsema/examples/tagex/basic/generic
 
 go 1.24.4
 
