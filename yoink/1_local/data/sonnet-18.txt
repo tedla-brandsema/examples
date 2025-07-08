@@ -1,0 +1,6 @@
+Sonnet 18: Shall I compare thee to a summer’s day?
+By William Shakespeare
+
+.yoink sonnet-18-quatrains.txt
+
+.yoink sonnet-18-rhyming-couplet.txt
