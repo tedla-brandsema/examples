@@ -8,15 +8,16 @@ import (
 )
 
 func main() {
-
-	path := "./data/sonnet-18.txt"
-	file, err := os.Open(path)
+	// Open the root file
+	name := "./data/sonnet-18.txt"
+	file, err := os.Open(name)
 	if err != nil {
 		panic(err)
 	}
 	defer file.Close()
 
-	txt, err := yoink.Parse(context.Background(), file, path)
+	// Resolve .yoink commands in the root file
+	txt, err := yoink.Parse(context.Background(), file, name)
 	if err != nil {
 		panic(err)
 	}
