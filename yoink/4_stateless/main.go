@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// START ParserFunc OMIT
+// START ParseFunc OMIT
 func HelloParser(sourceFile string, sourceLine int, cmd string) (string, error) {
 	// Default subject of the greeting
 	subject := fmt.Sprintf("from %s", sourceFile)
@@ -25,10 +25,10 @@ func HelloParser(sourceFile string, sourceLine int, cmd string) (string, error) 
 	return fmt.Sprintf("%d. Hello, %s!", sourceLine, subject), nil
 }
 
-// END ParserFunc OMIT
+// END ParseFunc OMIT
 
 func main() {
-	// Register the HelloParser, which is a ParserFunc
+	// Register the HelloParser, which is a ParseFunc
 	// START RegisterParserFunc OMIT
 	yoink.RegisterParserFunc("hello", HelloParser)
 	// END RegisterParserFunc OMIT
