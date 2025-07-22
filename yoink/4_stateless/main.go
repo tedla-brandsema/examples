@@ -41,7 +41,7 @@ func main() {
 	}
 	defer file.Close()
 
-	// Resolve .yoink commands in the root file
+	// Resolve .hello commands in the root file
 	txt, err := yoink.Parse(context.Background(), file, name)
 	if err != nil {
 		panic(err)
