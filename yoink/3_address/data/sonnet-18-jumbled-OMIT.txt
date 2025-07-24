@@ -2,6 +2,9 @@ Sonnet 18: Shall I compare thee to a summer’s day?
 By William Shakespeare
 
 .yoink sonnet-18-quatrains-OMIT.txt /START stanza-2 OMIT/,/END stanza-2 OMIT/
+
 .yoink sonnet-18-rhyming-couplet.txt
+
 .yoink sonnet-18-quatrains-OMIT.txt /START stanza-3 OMIT/,/END stanza-3 OMIT/
+
 .yoink sonnet-18-quatrains-OMIT.txt /START stanza-1 OMIT/,/END stanza-1 OMIT/
